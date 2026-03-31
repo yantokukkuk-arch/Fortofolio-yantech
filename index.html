@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yantech · portfolio modern</title>
+  <!-- fonts & icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ===== RESET & VARIABLES ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0c10;
+      color: #eaeef2;
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* kustom kursor (opsional, ringan) */
+    .cursor-dot, .cursor-outline { display: none; } /* tetap cantik tanpa kursor kustom */
+
+    /* ===== BACKGROUND SHAPES ===== */
+    .shape {
+      position: fixed;
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .circle {
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: #6c5ce7;
+      top: -100px; right: -100px;
+      filter: blur(80px);
+    }
+    .square {
+      width: 350px; height: 350px;
+      background: #00d2ff;
+      bottom: 10%; left: -100px;
+      border-radius: 40px;
+      transform: rotate(25deg);
+      filter: blur(90px);
+    }
+    .triangle {
+      width: 0; height: 0;
+      border-left: 200px solid transparent;
+      border-right: 200px solid transparent;
+      border-bottom: 350px solid #a463f5;
+      bottom: 5%; right: 5%;
+      opacity: 0.02;
+      filter: blur(50px);
+    }
+
+    /* ===== NAVIGATION ===== */
+    nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(20, 25, 35, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(110, 130, 200, 0.2);
+      border-radius: 60px;
+      padding: 12px 28px;
+      z-index: 100;
+      box-shadow: 0 15px 40px -15px rgba(0,0,0,0.5);
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .nav-links a {
+      color: #d0d9ff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      letter-spacing: 0.3px;
+      transition: 0.25s;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 4px;
+    }
+    .nav-links a:hover {
+      color: white;
+      border-bottom-color: #8a7cff;
+    }
+
+    /* ===== MAIN CONTAINER ===== */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 120px 30px 80px;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* setiap section berpasangan gambar+konten */
+    .section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      margin-bottom: 140px;
+      align-items: center;
+    }
+    .section:nth-child(even) .image-wrapper { order: 2; } /* about, featured, contact dibalik */
+
+    /* image wrapper + floating bubbles */
+    .image-wrapper {
+      position: relative;
+      border-radius: 32px;
+      overflow: visible;
+      box-shadow: 0 30px 40px -20px rgba(0,0,0,0.6);
+      transition: transform 0.3s ease;
+    }
+    .image-wrapper img {
+      width: 100%;
+      height: auto;
+      border-radius: 32px;
+      border: 2px solid rgba(130, 140, 210, 0.3);
+      background: #151a24;
+      display: block;
+      box-shadow: 0 20px 30px -15px #00000080;
+    }
+    /* floating bubbles */
+    .floating-bubble {
+      position: absolute;
+      background: rgba(20, 30, 55, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid #5f7fbf50;
+      border-radius: 60px;
+      padding: 8px 22px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 12px 25px -8px #00000080;
+      white-space: nowrap;
+      animation: float 5s infinite alternate ease-in-out;
+      z-index: 10;
+    }
+    .floating-bubble i { color: #a6b6ff; font-size: 1.2rem; }
+
+    .bubble-1 { top: 5%; left: -20px; animation-delay: 0s; }
+    .bubble-2 { bottom: 10%; right: -25px; animation-delay: 1s; }
+    .bubble-3 { top: 30%; right: -15px; animation-delay: 1.8s; }
+    .bubble-4 { bottom: 20%; left: -30px; animation-delay: 0.6s; }
+    .bubble-5 { top: 60%; left: -15px; animation-delay: 2.2s; }
+    .bubble-6 { bottom: -5%; right: 5%; animation-delay: 1.2s; }
+
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0); }
+      100% { transform: translateY(-12px) translateX(8px); }
+    }
+
+    /* konten kanan */
+    h1, h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(145deg, #ffffff, #c0b7ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1.2;
+      margin-bottom: 18px;
+    }
+    h2 { font-size: 2.8rem; }
+    p {
+      color: #b0bbd0;
+      font-size: 1.1rem;
+      margin: 25px 0 20px;
+      max-width: 550px;
+    }
+
+    /* typing effect */
+    .typing {
+      font-size: 2rem;
+      font-weight: 600;
+      min-height: 4rem;
+      color: #cfdbfe;
+    }
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      height: 2rem;
+      background: #af9eff;
+      margin-left: 6px;
+      vertical-align: middle;
+      animation: blink 0.9s infinite;
+    }
+    @keyframes blink { 0%,100%{ opacity:1 } 50%{ opacity:0 } }
+
+    /* info grid (about) */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin: 35px 0 30px;
+    }
+    .info-item {
+      background: #141c26;
+      border-radius: 30px;
+      padding: 18px 12px;
+      text-align: center;
+      border: 1px solid #293544;
+      transition: 0.2s;
+    }
+    .info-icon {
+      font-size: 1.8rem;
+      color: #9590ff;
+      margin-bottom: 8px;
+    }
+    .info-label { display: block; color: #8b99b0; font-size: 0.85rem; }
+    .info-value { font-weight: 600; font-size: 1.25rem; }
+
+    /* bubble grid (kemampuan) */
+    .bubble-box {
+      background: rgba(20, 28, 40, 0.6);
+      backdrop-filter: blur(6px);
+      border: 1px solid #2d3748;
+      border-radius: 40px;
+      padding: 25px;
+    }
+    .bubble-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .bubble-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: #1e2735;
+      padding: 15px 20px;
+      border-radius: 40px;
+      border-left: 4px solid #7d86ff;
+    }
+    .bubble-item .icon i { font-size: 2rem; color: #b5aeff; width: 40px; }
+    .content { display: flex; flex-direction: column; }
+    .label { font-size: 0.8rem; color: #a0aec0; }
+    .value { font-weight: 600; font-size: 1.1rem; }
+
+    /* featured cards */
+    .featured-description { margin-bottom: 40px; }
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+    .featured-card {
+      background: #151f2b;
+      border-radius: 30px;
+      padding: 25px 20px;
+      border: 1px solid #273544;
+      transition: all 0.2s;
+    }
+    .featured-card:hover { background: #1b2737; border-color: #6560bb; transform: scale(1.01); }
+    .featured-icon i { font-size: 2.5rem; color: #b1aeff; margin-bottom: 15px; }
+    .featured-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 15px; }
+    .featured-tech { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    /* tech badge */
+    .tech-badge {
+      background: #252f40;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #b7c9f0;
+      border: 1px solid #3c4a60;
+    }
+
+    /* project cards (projects section) */
+    .project-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-top: 30px;
+    }
+    .project-card {
+      background: #121b24;
+      border-radius: 36px;
+      padding: 20px;
+      border: 1px solid #2b3748;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .project-card:hover { background: #1c2938; }
+    .project-image {
+      border-radius: 24px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      max-height: 160px;
+    }
+    .project-image img { width: 100%; display: block; object-fit: cover; }
+    .project-title { font-size: 1.8rem; font-weight: 600; margin: 10px 0 8px; }
+    .project-description { font-size: 0.9rem; margin: 10px 0; color: #a0b0c5; }
+    .project-actions {
+      display: flex;
+      gap: 15px;
+      margin: 20px 0 5px;
+    }
+    .project-btn {
+      background: transparent;
+      border: 1.5px solid #4f5996;
+      color: #d3dbff;
+      padding: 10px 25px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+      flex: 1;
+    }
+    .project-btn.source { background: #262f44; border-color: #7d7fc5; }
+    .project-btn:hover { background: #33415e; color: white; }
+
+    /* contact row */
+    .contact-row {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 30px;
+    }
+    .contact-bubble {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: #16202d;
+      padding: 18px 28px;
+      border-radius: 80px;
+      border: 1px solid #3a465e;
+      cursor: pointer;
+      transition: 0.2s;
+      width: fit-content;
+    }
+    .contact-bubble:hover { background: #1f2c3f; border-color: #8a89d1; }
+    .contact-bubble img { width: 32px; height: 32px; filter: brightness(0) invert(0.8); }
+    .contact-bubble span { font-weight: 500; font-size: 1.2rem; }
+
+    /* modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(5, 8, 15, 0.9);
+      backdrop-filter: blur(12px);
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+    .modal-content {
+      background: #1e2636;
+      max-width: 500px;
+      width: 90%;
+      border-radius: 48px;
+      padding: 30px;
+      border: 1px solid #6d70b0;
+      box-shadow: 0 30px 50px #00000080;
+      text-align: center;
+    }
+    .modal-content img { width: 100%; border-radius: 32px; margin-bottom: 25px; }
+    .modal-text { color: #ccd6f0; font-size: 1.2rem; }
+
+    /* responsive */
+    @media (max-width: 900px) {
+      .section { grid-template-columns: 1fr; gap: 30px; }
+      .section:nth-child(even) .image-wrapper { order: 0; }
+      nav { padding: 10px 20px; }
+      .nav-links { gap: 20px; }
+      h1 { font-size: 2.5rem; }
+      .floating-bubble { font-size: 0.75rem; padding: 4px 14px; }
+    }
+    @media (max-width: 550px) {
+      .featured-grid, .project-grid, .bubble-grid { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- decorative background shapes -->
+  <div class="shape circle"></div>
+  <div class="shape square"></div>
+  <div class="shape triangle"></div>
+
+  <!-- navigation -->
+  <nav>
+    <div class="nav-container">
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#oxynet">OxyNet</a>
+        <a href="#featured">Featured</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- home -->
+    <section class="section" id="home">
+      <div class="image-wrapper">
+        <img src="https://files.catbox.moe/79j3u1.jpg" alt="Yantech profile">
+        <div class="floating-bubble bubble-1"><i class="fas fa-magic"></i> Smooth Animation</div>
+        <div class="floating-bubble bubble-2"><i class="fas fa-mobile-alt"></i> Responsive</div>
+        <div class="floating-bubble bubble-3"><i class="fas fa-device"></i> All Device</div>
+      </div>
+      <div>
+        <h1>Hello, I'm Yantech</h1>
+        <div class="typing">
+          <span id="typing"></span><span class="cursor"></span>
+        </div>
+        <p>
+          Saya adalah seorang web developer dan prompt engineer dengan pengalaman 1 tahun lebih dalam membangun website modern dan mengeksplorasi teknologi berbasis AI. Saya fokus pada pembuatan sistem web yang tidak hanya menarik secara visual tetapi juga memiliki struktur yang efisien dan mudah digunakan.
+        </p>
+      </div>
+    </section>
+
+    <!-- about -->
+    <section class="section" id="about">
+      <div class="image-wrapper">
+        <img src="https://files.catbox.moe/gcywyk.jpg" alt="About me">
+        <div class="floating-bubble bubble-4 experience-badge" style="bottom: 5%; left: 5%;"><i class="fas fa-briefcase"></i> 1+ Years Experience</div>
+      </div>
+      <div>
+        <h2>About Me</h2>
+        <p>
+          Perjalanan saya di dunia teknologi dimulai dari rasa penasaran terhadap bagaimana internet dan sistem digital bekerja. Dari situ saya mulai mempelajari pengembangan website, memahami struktur frontend dan backend, serta melakukan berbagai eksperimen dengan AI tools.
+        </p>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <span class="info-label">Lokasi</span>
+            <span class="info-value">Tangerang</span>
+          </div>
+          <div class="info-item">
+            <div class="info-icon"><i class="fas fa-birthday-cake"></i></div>
+            <span class="info-label">Umur</span>
+            <span class="info-value">15 Tahun</span>
+          </div>
+          <div class="info-item">
+            <div class="info-icon"><i class="fas fa-briefcase"></i></div>
+            <span class="info-label">Experience</span>
+            <span class="info-value">1 Tahun+</span>
+          </div>
+        </div>
+
+        <div class="bubble-box">
+          <h3 style="font-size: 1.4rem; margin-bottom: 20px; color: #ddd8ff;">Kemampuan Saya</h3>
+          <div class="bubble-grid">
+            <div class="bubble-item"><div class="icon"><i class="fas fa-code"></i></div><div class="content"><span class="label">Frontend</span><span class="value">HTML & CSS</span></div></div>
+            <div class="bubble-item"><div class="icon"><i class="fas fa-laptop-code"></i></div><div class="content"><span class="label">Programming</span><span class="value">JavaScript</span></div></div>
+            <div class="bubble-item"><div class="icon"><i class="fas fa-robot"></i></div><div class="content"><span class="label">AI Specialist</span><span class="value">Prompt Engineer</span></div></div>
+            <div class="bubble-item"><div class="icon"><i class="fas fa-paint-brush"></i></div><div class="content"><span class="label">Kreatif</span><span class="value">Menggambar</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- oxynet -->
+    <section class="section" id="oxynet">
+      <div class="image-wrapper">
+        <img src="https://files.catbox.moe/7m0ri5.jpg" alt="OxyNet community">
+        <div class="floating-bubble bubble-4"><i class="fas fa-users"></i> 800+ Members</div>
+        <div class="floating-bubble bubble-5"><i class="fas fa-calendar-alt"></i> 4+ Months</div>
+      </div>
+      <div>
+        <h2>OxyNet Community</h2>
+        <p>
+          Saya juga merupakan CEO dari komunitas bernama OxyNet. Komunitas ini dibangun sebagai ruang bagi orang-orang yang tertarik untuk mempelajari lebih dalam tentang teknologi AI, khususnya pada bidang prompt engineering, eksperimen sistem AI, serta eksplorasi batasan teknologi tersebut.
+        </p>
+        <p>
+          Di dalam komunitas ini para anggota dapat berdiskusi, berbagi penelitian kecil, serta mengembangkan berbagai ide terkait penggunaan AI dalam dunia teknologi modern.
+        </p>
+      </div>
+    </section>
+
+    <!-- featured -->
+    <section class="section" id="featured">
+      <div class="image-wrapper">
+        <img src="https://files.catbox.moe/mkkrdu.jpg" alt="Featured Projects">
+        <div class="floating-bubble bubble-1"><i class="fas fa-clipboard-list"></i> Web Registrasi</div>
+        <div class="floating-bubble bubble-2"><i class="fas fa-user-circle"></i> Portofolio</div>
+        <div class="floating-bubble bubble-3"><i class="fas fa-brain"></i> Assistant AI</div>
+        <div class="floating-bubble bubble-4"><i class="fas fa-globe"></i> Official Web</div>
+        <div class="floating-bubble bubble-5"><i class="fas fa-chart-bar"></i> Dashboard</div>
+        <div class="floating-bubble bubble-6"><i class="fas fa-bolt"></i> Performance</div>
+      </div>
+      <div>
+        <h2>Featured Projects</h2>
+        <p class="featured-description">
+          Koleksi project unggulan yang saya kembangkan dengan berbagai teknologi modern.
+        </p>
+        <div class="featured-grid">
+          <div class="featured-card"><div class="featured-icon"><i class="fas fa-clipboard-list"></i></div><h3 class="featured-title">Web Registrasi</h3><div class="featured-tech"><span class="tech-badge">HTML</span><span class="tech-badge">CSS</span><span class="tech-badge">JS</span><span class="tech-badge">Database</span></div></div>
+          <div class="featured-card"><div class="featured-icon"><i class="fas fa-user-circle"></i></div><h3 class="featured-title">Portofolio</h3><div class="featured-tech"><span class="tech-badge">HTML</span><span class="tech-badge">CSS</span><span class="tech-badge">JS</span><span class="tech-badge">Responsive</span></div></div>
+          <div class="featured-card"><div class="featured-icon"><i class="fas fa-brain"></i></div><h3 class="featured-title">Assistant AI</h3><div class="featured-tech"><span class="tech-badge">AI Tools</span><span class="tech-badge">API</span><span class="tech-badge">JS</span><span class="tech-badge">Prompt</span></div></div>
+          <div class="featured-card"><div class="featured-icon"><i class="fas fa-globe"></i></div><h3 class="featured-title">Official Website</h3><div class="featured-tech"><span class="tech-badge">HTML</span><span class="tech-badge">CSS</span><span class="tech-badge">JS</span><span class="tech-badge">SEO</span></div></div>
+          <div class="featured-card"><div class="featured-icon"><i class="fas fa-chart-bar"></i></div><h3 class="featured-title">Dashboard Admin</h3><div class="featured-tech"><span class="tech-badge">HTML</span><span class="tech-badge">CSS</span><span class="tech-badge">JS</span><span class="tech-badge">Chart</span></div></div>
+          <div class="featured-card"><div class="featured-icon"><i class="fas fa-bolt"></i></div><h3 class="featured-title">Performance Opt</h3><div class="featured-tech"><span class="tech-badge">Optimasi</span><span class="tech-badge">Caching</span><span class="tech-badge">Lazy Load</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- projects -->
+    <section class="section" id="projects">
+      <div class="image-wrapper">
+        <img src="https://files.catbox.moe/m3f943.jpg" alt="Projects">
+        <div class="floating-bubble bubble-1"><i class="fab fa-html5"></i> HTML5</div>
+        <div class="floating-bubble bubble-2"><i class="fab fa-css3-alt"></i> CSS3</div>
+        <div class="floating-bubble bubble-3"><i class="fab fa-js"></i> JavaScript</div>
+      </div>
+      <div>
+        <h2>Projects</h2>
+        <p class="projects-description">
+          Beberapa project yang saya bangun berfokus pada sistem website modern seperti platform registrasi komunitas, dashboard admin, dan eksplorasi teknologi berbasis AI.
+        </p>
+        <div class="project-grid">
+          <!-- ICOA -->
+          <div class="project-card" onclick="openModal('icoa')">
+            <div class="project-image"><img src="https://files.catbox.moe/m3f943.jpg" alt="ICOA project"></div>
+            <h3 class="project-title">ICOA</h3>
+            <p class="project-description">Website registrasi komunitas dengan dashboard admin lengkap untuk manajemen anggota dan verifikasi data.</p>
+            <div class="tech-stack"><span class="tech-badge">HTML</span><span class="tech-badge">CSS</span><span class="tech-badge">JavaScript</span><span class="tech-badge">API</span></div>
+            <div class="project-actions">
+              <button class="project-btn" onclick="event.stopPropagation(); window.open('https://wa.me/639679848145', '_blank')">Live Demo</button>
+              <button class="project-btn source" onclick="event.stopPropagation(); window.open('#', '_blank')">Source</button>
+            </div>
+          </div>
+          <!-- TICEA -->
+          <div class="project-card" onclick="openModal('ticea')">
+            <div class="project-image"><img src="https://files.catbox.moe/7zb5w7.jpg" alt="TICEA project"></div>
+            <h3 class="project-title">TICEA</h3>
+            <p class="project-description">Platform seleksi anggota komunitas dengan sistem pendaftaran digital dan manajemen data peserta.</p>
+            <div class="tech-stack"><span class="tech-badge">HTML</span><span class="tech-badge">CSS</span><span class="tech-badge">JavaScript</span><span class="tech-badge">Database</span></div>
+            <div class="project-actions">
+              <button class="project-btn" onclick="event.stopPropagation(); window.open('https://wa.me/639679848145', '_blank')">Live Demo</button>
+              <button class="project-btn source" onclick="event.stopPropagation(); window.open('#', '_blank')">Source</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- contact -->
+    <section class="section" id="contact">
+      <div class="image-wrapper">
+        <img src="https://files.catbox.moe/7zb5w7.jpg" alt="Contact">
+        <div class="floating-bubble bubble-1"><i class="fab fa-whatsapp"></i> WhatsApp</div>
+        <div class="floating-bubble bubble-3"><i class="fas fa-envelope"></i> Email</div>
+      </div>
+      <div>
+        <h2>Contact</h2>
+        <p>
+          Jika Anda tertarik untuk berdiskusi, bekerja sama dalam project web, atau hanya sekadar berbagi ide mengenai teknologi dan AI, Anda dapat menghubungi saya melalui platform berikut.
+        </p>
+        <div class="contact-row">
+          <div class="contact-bubble" onclick="window.open('https://wa.me/639679848145', '_blank')">
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+            <span>639679848145</span>
+          </div>
+          <div class="contact-bubble" onclick="window.open('mailto:yantech@example.com', '_blank')">
+            <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Email">
+            <span>yantech@example.com</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- modal sederhana -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <img id="modal-img" src="https://files.catbox.moe/m3f943.jpg" alt="Project detail">
+      <div class="modal-text" id="modal-text">Detail project akan segera hadir.</div>
+    </div>
+  </div>
+
+  <script>
+    // === TYPING EFFECT ===
+    const typingElement = document.getElementById('typing');
+    const phrases = ['Web Developer', 'Prompt Engineer', 'AI Enthusiast', 'UI Designer'];
+    let i = 0, j = 0, currentPhrase = [], isDeleting = false;
+
+    function typeLoop () {
+      if (!typingElement) return;
+      if (i < phrases.length) {
+        if (!isDeleting && j <= phrases[i].length) {
+          currentPhrase = phrases[i].substring(0, j);
+          typingElement.textContent = currentPhrase;
+          j++;
+        }
+        if (isDeleting && j <= phrases[i].length) {
+          currentPhrase = phrases[i].substring(0, j-1);
+          typingElement.textContent = currentPhrase;
+          j--;
+        }
+        if (j === phrases[i].length + 1) {
+          isDeleting = true;
+        }
+        if (j === 0) {
+          isDeleting = false;
+          i = (i + 1) % phrases.length;
+        }
+      }
+      setTimeout(typeLoop, isDeleting ? 100 : 200);
+    }
+    typeLoop();
+
+    // === MODAL ===
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalText = document.getElementById('modal-text');
+
+    window.openModal = (project) => {
+      if (project === 'icoa') {
+        modalImg.src = "https://files.catbox.moe/m3f943.jpg";
+        modalText.innerText = "ICOA — sistem registrasi komunitas dengan dashboard lengkap.";
+      } else if (project === 'ticea') {
+        modalImg.src = "https://files.catbox.moe/7zb5w7.jpg";
+        modalText.innerText = "TICEA — platform seleksi anggota dan manajemen data.";
+      }
+      modal.style.display = 'flex';
+    };
+
+    window.onclick = function(e) {
+      if (e.target === modal) modal.style.display = 'none';
+    };
+
+    // tutup dengan tombol escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.style.display === 'flex') modal.style.display = 'none';
+    });
+
+    // pastikan semua gambar & tautan aman
+    console.log('Portfolio Yantech siap!');
+  </script>
+</body>
+            </html>
